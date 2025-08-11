@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NY PL & CPL Flashcards</title>
+  <link rel="manifest" href="/static/manifest.json">
+  <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>NY Penal Law & CPL</h1>
+    <button id="installBtn" class="btn secondary" hidden>Install</button>
+  </header>
+
+  <main class="container">
+    <section class="card" id="quizCard" aria-live="polite">
+      <div class="pill" id="lawPill">Flashcard</div>
+      <h2 id="question" class="question">Loading…</h2>
+      <div id="answer" class="answer" hidden>
+        <div class="answer-line"><strong id="law"></strong> <span id="article"></span></div>
+        <div class="muted" id="sections"></div>
+      </div>
+      <div class="actions">
+        <button id="revealBtn" class="btn">Reveal</button>
+        <button id="nextBtn" class="btn primary">Next</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Browse & Search</h3>
+      <input id="search" type="search" placeholder="Search summaries or articles" aria-label="Search" />
+      <div id="list" class="list" role="list"></div>
+    </section>
+  </main>
+
+  <footer class="footer">Built with Flask · Works offline once loaded</footer>
+
+  <script>window.FLASHCARDS = {{ flashcards | tojson }};</script>
+  <script src="/static/app.js" defer></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js');
+      });
+    }
+  </script>
+</body>
+</html>
