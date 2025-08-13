@@ -1,6 +1,5 @@
-
 from flask import Flask, render_template, send_from_directory
-import random, os
+import random, os, argparse
 
 app = Flask(__name__, static_folder="static", static_url_path="/static", template_folder="templates")
 
@@ -52,12 +51,19 @@ def build_flashcards():
 
 @app.route("/")
 def index():
-    return render_template("index.html", flashcards=build_flashcards())
+    cards = build_flashcards()
+    return render_template("index.html", flashcards=cards)
+
+@app.route("/healthz")
+def healthz():
+    return {"status": "ok"}, 200
 
 @app.route("/service-worker.js")
 def service_worker():
     return send_from_directory(app.static_folder, "service-worker.js", mimetype="application/javascript")
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", 5000)))
+    args = parser.parse_args()
+    app.run(host="0.0.0.0", port=args.port, debug=True)
