@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, send_from_directory
 import random, os, argparse
 
@@ -44,10 +45,11 @@ criminal_procedure_law = {
 def build_flashcards():
     cards = []
     for key, value in penal_law.items():
-        cards.append({"summary": value["Summary"],"article": key,"sections": value["Sections"],"law": "Penal Law"})
+        cards.append({"summary": value["Summary"], "article": key, "sections": value["Sections"], "law": "Penal Law"})
     for key, value in criminal_procedure_law.items():
-        cards.append({"summary": value["Summary"],"article": key,"sections": value["Sections"],"law": "Criminal Procedure Law"})
-    random.shuffle(cards); return cards
+        cards.append({"summary": value["Summary"], "article": key, "sections": value["Sections"], "law": "Criminal Procedure Law"})
+    random.shuffle(cards)
+    return cards
 
 @app.route("/")
 def index():
