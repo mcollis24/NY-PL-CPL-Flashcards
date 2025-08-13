@@ -1,31 +1,25 @@
-
-const CACHE = 'ny-law-cards-v3';
+const CACHE = 'ny-law-cards-v5';
 const ASSETS = [
   '/',
-  '/static/style.css?v=3',
-  '/static/app.js?v=3',
+  '/static/style.css?v=5',
+  '/static/app.js?v=5',
   '/static/manifest.json',
   '/static/icons/icon-192.png',
   '/static/icons/icon-512.png'
 ];
-
-self.addEventListener('install', (event) => {
+self.addEventListener('install', (e) => {
   self.skipWaiting();
-  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)));
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
 });
-
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
-    .then(() => self.clients.claim())
-  );
+self.addEventListener('activate', (e) => {
+  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+    .then(() => self.clients.claim()));
 });
-
-self.addEventListener('fetch', (event) => {
-  const req = event.request;
+self.addEventListener('fetch', (e) => {
+  const req = e.request;
   if (req.mode === 'navigate') {
-    event.respondWith(fetch(req).catch(() => caches.match('/')));
+    e.respondWith(fetch(req).catch(() => caches.match('/')));
     return;
   }
-  event.respondWith(caches.match(req).then((resp) => resp || fetch(req)));
+  e.respondWith(caches.match(req).then(r => r || fetch(req)));
 });

@@ -48,7 +48,6 @@ def build_flashcards():
         cards.append({"summary": value["Summary"], "article": key, "sections": value["Sections"], "law": "Penal Law"})
     for key, value in criminal_procedure_law.items():
         cards.append({"summary": value["Summary"], "article": key, "sections": value["Sections"], "law": "Criminal Procedure Law"})
-    random.shuffle(cards)
     return cards
 
 @app.route("/")
