@@ -1,8 +1,8 @@
-const CACHE = 'ny-law-cards-v8';
+const CACHE = 'ny-law-cards-v9';
 const ASSETS = [
   '/',
-  '/static/style.css?v=8',
-  '/static/app.js?v=8',
+  '/static/style.css?v=9',
+  '/static/app.js?v=9',
   '/static/manifest.json',
   '/static/icons/icon-192.png',
   '/static/icons/icon-512.png'

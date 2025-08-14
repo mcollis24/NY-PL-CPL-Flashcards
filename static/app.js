@@ -29,7 +29,7 @@
 
   function show(idx){
     if (!deck.length) {
-      q.textContent = 'No sets selected — toggle some above, then press Apply.';
+      q.textContent = 'No sets selected — reveal the answer to adjust sets, then press Apply.';
       a.hidden = true;
       return;
     }

@@ -7,7 +7,7 @@
   <link rel="manifest" href="/static/manifest.json">
   <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
   <meta name="theme-color" content="#0f172a" />
-  <link rel="stylesheet" href="/static/style.css?v=8" />
+  <link rel="stylesheet" href="/static/style.css?v=9" />
 </head>
 <body>
   <header class="app-header">
@@ -21,21 +21,24 @@
   <main class="container">
     <section class="card" id="quizCard" aria-live="polite">
       <div class="pill" id="lawPill">Flashcard</div>
-      <div class="muted" style="margin-bottom:8px">Quiz sets:</div>
-      <div class="toggles" role="group" aria-label="Select law sets for quiz">
-        <label class="toggle"><input type="checkbox" id="tgl-pl" checked> <span>Penal Law</span></label>
-        <label class="toggle"><input type="checkbox" id="tgl-cpl" checked> <span>Criminal Procedure Law</span></label>
-        <label class="toggle"><input type="checkbox" id="tgl-ecl"> <span>Environmental Conservation Law</span></label>
-        <button id="reshuffleBtn" class="btn small">Apply</button>
-      </div>
-      <div class="hint muted">Tip: pick sets, then press Apply to rebuild & shuffle the deck.</div>
 
       <h2 id="question" class="question">Loading…</h2>
 
       <div id="answer" class="answer" hidden>
         <div class="answer-line"><strong id="law"></strong> <span id="article"></span></div>
         <div class="muted" id="sections"></div>
+
+        <!-- QUIZ SET TOGGLES are now under the Answer -->
+        <div class="muted" style="margin:10px 0 6px">Quiz sets:</div>
+        <div class="toggles" role="group" aria-label="Select law sets for quiz">
+          <label class="toggle"><input type="checkbox" id="tgl-pl" checked> <span>Penal Law</span></label>
+          <label class="toggle"><input type="checkbox" id="tgl-cpl" checked> <span>Criminal Procedure Law</span></label>
+          <label class="toggle"><input type="checkbox" id="tgl-ecl"> <span>Environmental Conservation Law</span></label>
+          <button id="reshuffleBtn" class="btn small">Apply</button>
+        </div>
+        <div class="hint muted">Tip: adjust sets, then press Apply to rebuild & shuffle the deck.</div>
       </div>
+
       <div class="actions">
         <button id="revealBtn" class="btn">Reveal</button>
         <button id="nextBtn" class="btn primary">Next</button>
@@ -49,13 +52,13 @@
     </section>
   </main>
 
-  <footer class="footer">Built with Flask · Works offline once loaded · Build v8</footer>
+  <footer class="footer">Built with Flask · Works offline once loaded · Build v9</footer>
 
   <script>
     window.QUIZ_SETS = {{ quiz_sets | tojson }};   // separate arrays per law
     window.BROWSE = {{ browse_items | tojson }};   // PL + CPL + ECL for browsing
   </script>
-  <script src="/static/app.js?v=8" defer></script>
+  <script src="/static/app.js?v=9" defer></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
