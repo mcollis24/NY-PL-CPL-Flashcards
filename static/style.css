@@ -9,7 +9,7 @@ h1{margin:0;font-size:1.25rem}
 .container{display:grid;gap:16px;max-width:900px;margin:16px auto;padding:0 16px}
 .card{background:var(--card);border:1px solid #1f2937;border-radius:16px;padding:16px;box-shadow:0 6px 24px rgba(0,0,0,.25)}
 .pill{display:inline-block;padding:4px 10px;border-radius:999px;background:#0b2533;color:#7dd3fc;border:1px solid #0a3a50;font-size:.8rem;margin-bottom:8px}
-.question{font-size:1.15rem;line-height:1.35;margin:.25rem 0 1rem}
+.question{font-size:1.15rem;line-height:1.35;margin:.5rem 0 1rem}
 .answer{background:#0b1220;border:1px dashed #1f2937;border-radius:12px;padding:12px}
 .answer-line{margin-bottom:6px}
 .muted{color:var(--muted);font-size:.95rem}
@@ -21,7 +21,7 @@ h1{margin:0;font-size:1.25rem}
 .btn.secondary{background:#111827;border-color:#374151}
 .btn.danger{background:#290e0e;border-color:#3f1b1b;color:#fecaca}
 .btn.small{padding:8px 10px;font-size:.9rem}
-.toggles{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 4px}
+.toggles{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 4px}
 .toggle{display:flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid #1f2937;border-radius:999px;background:#0b1220}
 input[type="search"]{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #1f2937;background:#0b1220;color:#var(--ink);margin:6px 0 10px}
 .list{display:grid;gap:8px;max-height:420px;overflow:auto;padding-right:4px}
