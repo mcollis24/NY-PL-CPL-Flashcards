@@ -1,12 +1,6 @@
 (function(){
-  const original = (window.FLASHCARDS || []).slice(); // backend order
-  const cards = original.slice(); // for quiz only
-
-  // Shuffle quiz deck
-  for (let j = cards.length - 1; j > 0; j--) {
-    const k = Math.floor(Math.random() * (j + 1));
-    [cards[j], cards[k]] = [cards[k], cards[j]];
-  }
+  const QUIZ_SETS = window.QUIZ_SETS || {};
+  const BROWSE = (window.BROWSE || []).slice();
 
   const q = document.getElementById('question');
   const a = document.getElementById('answer');
@@ -14,10 +8,32 @@
   const pill = document.getElementById('lawPill');
   const revealBtn = document.getElementById('revealBtn');
   const nextBtn = document.getElementById('nextBtn');
+  const reshuffleBtn = document.getElementById('reshuffleBtn');
+  const tPL = document.getElementById('tgl-pl');
+  const tCPL = document.getElementById('tgl-cpl');
+  const tECL = document.getElementById('tgl-ecl');
+
+  let deck = [];
   let i = 0;
 
+  function rebuildDeck(){
+    deck = [];
+    if (tPL.checked) deck = deck.concat(QUIZ_SETS['Penal Law'] || []);
+    if (tCPL.checked) deck = deck.concat(QUIZ_SETS['Criminal Procedure Law'] || []);
+    if (tECL.checked) deck = deck.concat(QUIZ_SETS['Environmental Conservation Law'] || []);
+    for (let j = deck.length - 1; j > 0; j--) {
+      const k = Math.floor(Math.random() * (j + 1));
+      [deck[j], deck[k]] = [deck[k], deck[j]];
+    }
+  }
+
   function show(idx){
-    const c = cards[idx % cards.length];
+    if (!deck.length) {
+      q.textContent = 'No sets selected — toggle some above, then press Apply.';
+      a.hidden = true;
+      return;
+    }
+    const c = deck[idx % deck.length];
     q.textContent = `What article covers: ${c.summary}?`;
     a.hidden = true;
     law.textContent = c.law;
@@ -27,10 +43,13 @@
   }
 
   revealBtn.addEventListener('click', ()=>{ a.hidden = false; });
-  nextBtn.addEventListener('click', ()=>{ i = (i+1)%cards.length; show(i); });
-  if(cards.length){ show(i); }
+  nextBtn.addEventListener('click', ()=>{ i = (i+1)%deck.length; show(i); });
+  reshuffleBtn.addEventListener('click', ()=>{ i = 0; rebuildDeck(); show(i); });
 
-  // Browse with grouped headers
+  rebuildDeck();
+  show(i);
+
+  // Browse (grouped headers)
   const list = document.getElementById('list');
   const search = document.getElementById('search');
 
@@ -48,8 +67,12 @@
       <div class="muted">${item.sections}</div>
       <div>${item.summary}</div>`;
     el.addEventListener('click', ()=>{
-      const idx = cards.findIndex(c => c.article === item.article && c.law === item.law);
-      if(idx >= 0){ i = idx; show(i); window.scrollTo({top:0,behavior:'smooth'}); }
+      const enabled = (item.law === 'Penal Law' && tPL.checked) ||
+                      (item.law === 'Criminal Procedure Law' && tCPL.checked) ||
+                      (item.law === 'Environmental Conservation Law' && tECL.checked);
+      if (!enabled) return;
+      const idx = deck.findIndex(c => c.article === item.article && c.law === item.law);
+      if (idx >= 0){ i = idx; show(i); window.scrollTo({top:0,behavior:'smooth'}); }
     });
     list.appendChild(el);
   }
@@ -58,16 +81,17 @@
     list.innerHTML = '';
     const pl = items.filter(x => x.law === 'Penal Law');
     const cpl = items.filter(x => x.law === 'Criminal Procedure Law');
-
+    const ecl = items.filter(x => x.law === 'Environmental Conservation Law');
     if (pl.length){ appendHeader('Penal Law'); pl.forEach(appendItem); }
     if (cpl.length){ appendHeader('Criminal Procedure Law'); cpl.forEach(appendItem); }
+    if (ecl.length){ appendHeader('Environmental Conservation Law'); ecl.forEach(appendItem); }
   }
 
-  renderList(original);
+  renderList(BROWSE);
 
   search.addEventListener('input', (e)=>{
     const v = e.target.value.toLowerCase();
-    const filtered = original.filter(c =>
+    const filtered = BROWSE.filter(c =>
       c.summary.toLowerCase().includes(v) ||
       c.article.toLowerCase().includes(v) ||
       c.sections.toLowerCase().includes(v) ||
@@ -76,7 +100,7 @@
     renderList(filtered);
   });
 
-  // Reset App: unregister SW + clear caches + reload
+  // Reset App
   async function resetApp(){
     try {
       if ('serviceWorker' in navigator) {

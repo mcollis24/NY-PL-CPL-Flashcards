@@ -1,6 +1,6 @@
 
 from flask import Flask, render_template, send_from_directory
-import random, os, argparse
+import os, argparse
 
 app = Flask(__name__, static_folder="static", static_url_path="/static", template_folder="templates")
 
@@ -42,18 +42,50 @@ criminal_procedure_law = {
     "Article 240: Discovery": {"Sections": "§§ 240.10-240.90","Summary": "Exchange of evidence before trial"}
 }
 
-def build_flashcards():
-    cards = []
-    for key, value in penal_law.items():
-        cards.append({"summary": value["Summary"], "article": key, "sections": value["Sections"], "law": "Penal Law"})
-    for key, value in criminal_procedure_law.items():
-        cards.append({"summary": value["Summary"], "article": key, "sections": value["Sections"], "law": "Criminal Procedure Law"})
-    return cards
+environmental_conservation_law = {
+    "Article 1: General Provisions": {"Sections": "§§ 1.00", "Summary": "Foundational policy and definitions across ECL"},
+    "Article 3: Department of Environmental Conservation": {"Sections": "§§ 3.01-3.52", "Summary": "Establishes the powers and duties of the DEC"},
+    "Article 6: Smart Growth Infrastructure": {"Sections": "§§ 6.00", "Summary": "Promotes sustainable and efficient infrastructure development"},
+    "Article 8: Environmental Quality Review (SEQRA)": {"Sections": "§§ 8.0101-8.0117", "Summary": "Requires environmental impact reviews for government actions"},
+    "Article 9: Lands and Forests": {"Sections": "§§ 9.01-9.55", "Summary": "Manages state forests, reforestation, and timber use"},
+    "Article 11: Fish and Wildlife": {"Sections": "§§ 11.01-11.55", "Summary": "Regulates wildlife, fishing, hunting, and trapping"},
+    "Article 13: Marine and Coastal Resources": {"Sections": "§§ 13.01-13.45", "Summary": "Covers coastal and marine habitat conservation"},
+    "Article 15: Water Resources": {"Sections": "§§ 15.01-15.55", "Summary": "Regulates surface and groundwater use and conservation"},
+    "Article 17: Water Pollution Control": {"Sections": "§§ 17.01-17.55", "Summary": "Sets water quality standards and discharge permits"},
+    "Article 19: Air Pollution Control": {"Sections": "§§ 19.01-19.55", "Summary": "Regulates air quality and emissions standards"},
+    "Article 23: Mineral Resources": {"Sections": "§§ 23.01-23.55", "Summary": "Covers mining permits, reclamation, and oil/gas drilling"},
+    "Article 24: Freshwater Wetlands": {"Sections": "§§ 24.01-24.55", "Summary": "Protects freshwater wetlands through permits and restrictions"},
+    "Article 25: Tidal Wetlands": {"Sections": "§§ 25.01-25.55", "Summary": "Regulates activities affecting coastal and tidal wetlands"},
+    "Article 27: Solid Waste Management": {"Sections": "§§ 27.01-27.71", "Summary": "Governs waste disposal, recycling, and landfill regulations"},
+    "Article 33: Pesticides": {"Sections": "§§ 33.01-33.55", "Summary": "Regulates sale, use, and disposal of pesticides"},
+    "Article 37: Hazardous Substances": {"Sections": "§§ 37.01-37.55", "Summary": "Lists and controls dangerous chemical substances"},
+    "Article 75: Climate Change Mitigation": {"Sections": "§§ 75.01-75.55", "Summary": "Establishes statewide emissions limits and carbon reduction goals"}
+}
+
+def build_quiz_sets():
+    def pack(d, name):
+        return [{"summary": v["Summary"], "article": k, "sections": v["Sections"], "law": name} for k, v in d.items()]
+    return {
+        "Penal Law": pack(penal_law, "Penal Law"),
+        "Criminal Procedure Law": pack(criminal_procedure_law, "Criminal Procedure Law"),
+        "Environmental Conservation Law": pack(environmental_conservation_law, "Environmental Conservation Law"),
+    }
+
+def build_browse_list():
+    items = []
+    for k, v in penal_law.items():
+        items.append({"summary": v["Summary"], "article": k, "sections": v["Sections"], "law": "Penal Law"})
+    for k, v in criminal_procedure_law.items():
+        items.append({"summary": v["Summary"], "article": k, "sections": v["Sections"], "law": "Criminal Procedure Law"})
+    for k, v in environmental_conservation_law.items():
+        items.append({"summary": v["Summary"], "article": k, "sections": v["Sections"], "law": "Environmental Conservation Law"})
+    return items
 
 @app.route("/")
 def index():
-    cards = build_flashcards()
-    return render_template("index.html", flashcards=cards)
+    return render_template("index.html",
+                           quiz_sets=build_quiz_sets(),
+                           browse_items=build_browse_list())
 
 @app.route("/healthz")
 def healthz():
