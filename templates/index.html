@@ -7,7 +7,7 @@
   <link rel="manifest" href="/static/manifest.json">
   <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
   <meta name="theme-color" content="#0f172a" />
-  <link rel="stylesheet" href="/static/style.css?v=9" />
+  <link rel="stylesheet" href="/static/style.css?v=10b" />
 </head>
 <body>
   <header class="app-header">
@@ -24,11 +24,19 @@
 
       <h2 id="question" class="question">Loading…</h2>
 
-      <div id="answer" class="answer" hidden>
-        <div class="answer-line"><strong id="law"></strong> <span id="article"></span></div>
+      
         <div class="muted" id="sections"></div>
 
         <!-- QUIZ SET TOGGLES are now under the Answer -->
+        <div class="muted" style="margin:10px 0 6px">Quiz sets:</div>
+        </div>
+
+      <div class="actions">
+        <button id="revealBtn" class="btn">Reveal</button>
+        <button id="nextBtn" class="btn primary">Next</button>
+      </div>
+
+      <div id="toggles-row" class="toggles-row">
         <div class="muted" style="margin:10px 0 6px">Quiz sets:</div>
         <div class="toggles" role="group" aria-label="Select law sets for quiz">
           <label class="toggle"><input type="checkbox" id="tgl-pl" checked> <span>Penal Law</span></label>
@@ -36,13 +44,10 @@
           <label class="toggle"><input type="checkbox" id="tgl-ecl"> <span>Environmental Conservation Law</span></label>
           <button id="reshuffleBtn" class="btn small">Apply</button>
         </div>
-        <div class="hint muted">Tip: adjust sets, then press Apply to rebuild & shuffle the deck.</div>
       </div>
 
-      <div class="actions">
-        <button id="revealBtn" class="btn">Reveal</button>
-        <button id="nextBtn" class="btn primary">Next</button>
-      </div>
+<div id="answer" class="answer" hidden>
+        <div class="answer-line"><strong id="law"></strong> <span id="article"></span></div>
     </section>
 
     <section class="card">
@@ -58,7 +63,7 @@
     window.QUIZ_SETS = {{ quiz_sets | tojson }};   // separate arrays per law
     window.BROWSE = {{ browse_items | tojson }};   // PL + CPL + ECL for browsing
   </script>
-  <script src="/static/app.js?v=9" defer></script>
+  <script src="/static/app.js?v=10b" defer></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
